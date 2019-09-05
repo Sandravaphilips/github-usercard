@@ -48,25 +48,27 @@ const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigkne
 */
 
 function cardComponent(user) {
-  const [div, img, div1, h3, p, p1, p2, p3, p4, p5, a] = ['div', 'img', 'div', 'h3', 'p', 'p', 'p', 'p', 'p', 'p', 'a' ]
+  const [div, img, div1, h3, p, p1, p2, p3, p4, p5, a, button] = ['div', 'img', 'div', 'h3', 'p', 'p', 'p', 'p', 'p', 'p', 'a', 'button' ]
   .map(element => document.createElement(element));
 
   div.classList.add('card');
   div1.classList.add('card-info');
   h3.classList.add('name');
   p.classList.add('username');
+  // button.classList.add('expandButton');
 
   img.setAttribute('src', user['avatar_url']);
   a.setAttribute('href', user.url);
 
-  a.textContent = `${user.url}`;
-  h3.textContent = `${user.login}`;
+  a.textContent = user.url;
+  h3.textContent = user.login;
   p.textContent = user.login;
   p1.textContent = `Location: ${user.location}`;
   p2.innerHTML = `Profile: `;
   p3.textContent = `Followers: ${user.followers}`;
   p4.textContent = `Following: ${user.following}`;
   p5.textContent = `Bio: ${user.bio}`;
+  button.innerHTML = `Expand/ <br> Contract`;
   
 
   p2.appendChild(a);
@@ -79,6 +81,13 @@ function cardComponent(user) {
   div1.appendChild(p5);
   div.appendChild(img);
   div.appendChild(div1);
+  div.appendChild(button);
+  
+
+  button.addEventListener('click', () => {
+    div1.classList.toggle('open');
+    // button.classList.toggle('hidden')
+  })
 
   return div;
 
