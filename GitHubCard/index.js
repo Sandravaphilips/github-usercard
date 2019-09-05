@@ -57,16 +57,17 @@ function cardComponent(user) {
   p.classList.add('username');
 
   img.setAttribute('src', user['avatar_url']);
-  a.setAttribute('href', user.address);
+  a.setAttribute('href', user.url);
 
-  h3.textContent = user.login;
+  a.textContent = `${user.url}`;
+  h3.textContent = `${user.login}`;
   p.textContent = user.login;
   p1.textContent = `Location: ${user.location}`;
-  p2.textContent = `Profile: `;
+  p2.innerHTML = `Profile: `;
   p3.textContent = `Followers: ${user.followers}`;
   p4.textContent = `Following: ${user.following}`;
   p5.textContent = `Bio: ${user.bio}`;
-  a.textContent = user.address;
+  
 
   p2.appendChild(a);
   div1.appendChild(h3);
@@ -92,20 +93,42 @@ function cardComponent(user) {
 */
 
 axios.get('https://api.github.com/users/Sandravaphilips')
-.then(data => {
+.then(response => {
+  // debugger
+  
   document.querySelector('.cards').appendChild(
-    cardComponent(data)
+    cardComponent(response.data)
   )
 })
-.catch(err => console.log(err))
+.catch(err => {
+  // debugger
+  console.log(err)
+})
 
-
-followersArray.forEach(follower => {
-  axios.get('https://api.github.com/users/' + follower)
-  .then(data => {
-  document.querySelector('.cards').appendChild(
-    cardComponent(data)
-  )
+function followers(myApi) {
+  axios.get(myApi)
+  .then(response => {
+    axios.get(response.data['followers_url'])
+    .then(response => {
+      response.data.forEach(follower => {
+        document.querySelector('.cards').appendChild(
+          cardComponent(follower))
+      })
+    }
+      
+    )
+    .catch(err => console.log(err))
   })
   .catch(err => console.log(err))
-})
+}
+// followersArray.forEach(follower => {
+//   axios.get('https://api.github.com/users/' + follower)
+//   .then(response => {
+//   document.querySelector('.cards').appendChild(
+//     cardComponent(response.data)
+//   )
+//   })
+//   .catch(err => console.log(err))
+// })
+
+followers('https://api.github.com/users/Sandravaphilips');
